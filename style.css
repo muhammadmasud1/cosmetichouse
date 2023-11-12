@@ -1,0 +1,11 @@
+/* #imageContainer{
+ height: 100%;
+ width: 100%;
+ overflow: hidden;
+}
+#imageContainer #scaleImg{
+            transform-origin:center ;
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+} */

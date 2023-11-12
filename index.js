@@ -16,10 +16,10 @@ var countDownDate = new Date("Jan 1, 2024 00:00:00").getTime();
             var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
             // Display the result in the corresponding elements
-            document.getElementById("days").textContent = days + "d";
+           /*  document.getElementById("days").textContent = days + "d";
             document.getElementById("hours").textContent = hours + "h";
             document.getElementById("minutes").textContent = minutes + "m";
-            document.getElementById("seconds").textContent = seconds + "s";
+            document.getElementById("seconds").textContent = seconds + "s"; */
 
 
             // If the count down is over, write some text 
@@ -61,28 +61,42 @@ const ourBrandShow = (brandItems) => {
   };
 };
 
-const productContainerShow = async () => {
+const productContainerShow = async (isMore,lessMore) => {
   const res = await fetch(
     "https://cosmetics-backend-server.vercel.app/product"
   );
   const data = await res.json();
-  productItemShow(data);
+  productItemShow(data,isMore,lessMore);
  /*  console.log(data); */
+ console.log(isMore);
+ /* console.log(lessMore); */
+ 
 
  
 };
 productContainerShow();
 
-const productItemShow = (ProductDetails) => {
+const productItemShow = (productData,isMore,lessMore) => {
   const productItemsId = document.getElementById("productContainer");
-  productData = ProductDetails.slice(0,4)
+  const productBtn = document.getElementById('productBtn')
+  const lessMoreBtn = document.getElementById('lessMoreBtn')
+
+  
+if(!isMore){
+  productData = productData.slice(0,4)
+  productBtn.classList.remove('hidden')
+}else{
+  productBtn.classList.add('hidden')
+}
+
+
   for (let products of productData) {
 
     const div = document.createElement("div");
     div.classList = "card w-[100%] h-[90%]  bg-base-100 shadow-xl";
     div.innerHTML = `
-    <figure class="h-full w-full border">
-        <img class="w-full h-[90%] object-cover" src=${products.photo} alt="Shoes" />
+    <figure class="h-full transition hover:scale-105 overflow-hidden w-full border" id="imageContainer">
+        <img id="scaleImg"class="w-full h-[90%] object-cover" src=${products.photo} alt="product" />
         </figure>
         <div class="card-body">
         <div class="flex justify-between">
@@ -101,19 +115,36 @@ const productItemShow = (ProductDetails) => {
 };
 
 
+/* const imageContainer = document.getElementById('imageContainer');
+const scaleImg = document.getElementById('scaleImg');
+
+imageContainer.addEventListener('mouseover', (e)=>{
+  const x = e.clientX - e.target.offsetLeft;
+  const y = e.clientY - e.target.offsetTop;
+
+  console.log(x,y);
+ scaleImg.style.transformOrigin = `${x}px ${y}px`;
+ scaleImg.style.transform = "scale(2)"
+
+}) */
+
 /* ===============cart product============================ */
 
-const cartContainer = async () => {
+const cartContainer = async (isMore) => {
   const res = await fetch("https://cosmetics-backend-server.vercel.app/cart");
   const data = await res.json()
-  cartProductShow(data);
+  cartProductShow(data,isMore);
   console.log(data);
 }
 cartContainer()
 
-const cartProductShow = (cardProduct) => {
+const cartProductShow = (cartData,isMore) => {
 const cartContainer = document.getElementById('cartProduct');
-cartData = cardProduct.slice(0,4)
+const productBtn = document.getElementById('productBtn')
+
+if(!isMore){
+  cartData = cartData.slice(0,4)
+}
 for(let cart of cartData){
   let div = document.createElement('div');
   div.classList = "card w-[100%] h-[90%]  bg-base-100 shadow-xl";
@@ -132,7 +163,18 @@ for(let cart of cartData){
         </div>
         </div> 
   
-  `
+  `;
   cartContainer.appendChild(div)
+};
+};
+
+const allShowProducts = (isMore) =>{
+  productContainerShow(true)
+  cartContainer(true)
 }
+/* const moreProductBtn = ()=>{
+  cartContainer(true)
+} */
+const lessMoreBtn = (lessMore) =>{
+  productContainerShow(true);
 }
